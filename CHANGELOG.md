@@ -1,7 +1,7 @@
 Next Release
 ============
 
-* Your contribution here.
+* Add integration with Doorkeeper [@fuCtor](https://github.com/fuCtor)
 
 #### Fixes
 
