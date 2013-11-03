@@ -8,7 +8,6 @@ module Grape::Middleware::Auth
         parameter: %w(bearer_token oauth_token),
         accepted_headers: %w(HTTP_AUTHORIZATION X_HTTP_AUTHORIZATION X-HTTP_AUTHORIZATION REDIRECT_X_HTTP_AUTHORIZATION),
         header: [/Bearer (.*)/i, /OAuth (.*)/i],
-        scope: :public
       }
     end
 
@@ -54,7 +53,9 @@ module Grape::Middleware::Auth
         else
                          
           if defined?(Doorkeeper)
-            @scopes = options[:scope].is_a?(Array) ? options[:scope] : [options[:scope]] 
+            @scopes = Doorkeeper.configuration.default_scopes
+            @scopes = options[:scope].is_a?(Array) ? options[:scope] : [options[:scope]] if options[:scope]
+            
             env['api.token'] = token if token.scopes.any? { |scope| @scopes.include? scope}
           else
             env['api.token'] = token if !token.respond_to?(:permission_for?) || token.permission_for?(env)
