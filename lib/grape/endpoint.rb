@@ -446,7 +446,9 @@ module Grape
             content_types: settings[:content_types],
             formatters: settings[:formatters],
             parsers: settings[:parsers]
-
+          
+      b.use Grape::Middleware::Auth::OAuth2, settings[:auth] if settings[:auth] && settings[:auth][:type] == :oauth2
+      
       b
     end
 
